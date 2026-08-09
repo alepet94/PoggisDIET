@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POGGI MEALS <3</title>
+<style>
+:root{--bg:#f7f5ef;--paper:#fff;--ink:#17251d;--muted:#6c756f;--line:#e5e4dc;--green:#426b4d;--soft:#e9f0ea;--pink:#b94c62;--pinksoft:#f8e8ec;--sand:#f3eadb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button{font:inherit}
+.app{max-width:1050px;margin:auto;padding:28px 18px 70px}
+header{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:24px}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:800;color:var(--green)}
+h1{margin:7px 0 0;font-size:clamp(34px,6vw,60px);letter-spacing:-.05em;line-height:1}
+.title-heart{color:var(--pink)}
+.header-note{max-width:330px;color:var(--muted);font-size:14px;line-height:1.5}
+.tabs{display:flex;gap:8px;margin-bottom:22px}
+.tab{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:10px 16px;cursor:pointer;color:var(--muted)}
+.tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:22px}
+.day{min-width:112px;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px;cursor:pointer;color:var(--muted)}
+.day strong{display:block;font-size:11px;letter-spacing:.08em}.day small{display:block;margin-top:4px}
+.day.active{background:var(--soft);border-color:#b7cbbb;color:var(--ink)}
+.heading span{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--green)} .heading h2{margin:4px 0 16px;font-size:32px;letter-spacing:-.03em}
+.meals{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.meal{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:20px;text-align:left;cursor:pointer;min-height:155px;display:flex;flex-direction:column}
+.meal:hover{transform:translateY(-2px)} .meal.done{background:#f7fbf7;border-color:#a9c1ad}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.type{font-weight:800;color:var(--green)}
+.meal h3{margin:18px 0 10px;font-size:20px;line-height:1.15}.tag{display:inline-block;background:var(--soft);color:var(--green);font-size:11px;border-radius:99px;padding:5px 8px}
+.open{margin-top:auto;padding-top:16px;font-size:13px;font-weight:800;display:flex;justify-content:space-between}
+.section{display:none}.section.active{display:block}
+.hero{background:var(--ink);color:white;border-radius:24px;padding:24px;margin-bottom:16px}.hero h2{margin:0 0 6px}.hero p{margin:0;color:#d7ddd8;line-height:1.55}
+.altgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.alt{background:white;border:1px solid var(--line);border-radius:20px;padding:20px}.alt h3{margin:0 0 7px}.alt p,.alt li{color:var(--muted);line-height:1.5}.alt ul{padding-left:20px}
+.modal{display:none;position:fixed;inset:0;background:#17251d77;z-index:20;align-items:flex-end;justify-content:center;padding:12px}.modal.show{display:flex}
+.box{width:min(700px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:26px;padding:26px;position:relative}.close{position:absolute;right:15px;top:15px;border:0;background:#eef0eb;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:20px}
+.kicker{color:var(--green);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.box h2{margin:7px 45px 14px;font-size:31px;line-height:1.05}.box h4{margin:22px 0 8px;border-top:1px solid var(--line);padding-top:18px}.box li{margin:7px 0;line-height:1.45}
+.outside{background:var(--sand);border-radius:16px;padding:15px;margin-top:20px;line-height:1.5}.donebtn{width:100%;margin-top:16px;border:0;border-radius:13px;padding:14px;background:var(--ink);color:#fff;font-weight:800;cursor:pointer}
+.surprise{position:fixed;z-index:50;left:50%;top:45%;transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none;font-size:clamp(30px,7vw,64px);font-weight:950;text-align:center;color:var(--ink);text-shadow:0 3px white,0 8px 25px #17251d22}
+.surprise.show{animation:pop 1.15s ease forwards}
+.heart{position:fixed;z-index:49;pointer-events:none;font-size:22px;animation:float 1.25s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.6) rotate(-7deg)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(4deg)}55%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-2deg)}100%{opacity:0;transform:translate(-50%,-58%) scale(1.12)}}
+@keyframes float{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:1}100%{opacity:0;transform:translate(var(--x),-100px) scale(1.3) rotate(var(--r))}}
+@media(max-width:700px){header{display:block}.header-note{margin-top:12px}.meals,.altgrid{grid-template-columns:1fr}.meal{min-height:145px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div>
+<div class="eyebrow">Il tuo percorso alimentare · V1</div>
+<h1 id="title">POGGI MEALS <span class="title-heart">&lt;3</span></h1>
+</div>
+<div class="header-note">Mangiare bene, sostenere una vita attiva e costruire gradualmente abitudini utili alla massa muscolare. Senza rigidità.</div>
+</header>
+<div class="tabs">
+<button class="tab active" data-view="week">Settimana</button>
+<button class="tab" data-view="outside">Fuori casa</button>
+</div>
+<section id="week" class="section active">
+<div id="days" class="days"></div>
+<div class="heading" id="heading"></div>
+<div id="meals" class="meals"></div>
+</section>
+<section id="outside" class="section">
+<div class="hero"><h2>Niente panico se cambia programma ❤️</h2><p>Se oggi si va al mare, in montagna o si mangia fuori, si cambia soluzione senza pensare di aver "sgarrato".</p></div>
+<div class="altgrid">
+<div class="alt"><h3>🥾 Montagna</h3><ul><li>Wrap di mais con pollo e hummus di ceci</li><li>Insalata di riso con tonno e verdure</li><li>Frittata + patate + pomodorini</li><li>Quinoa + pollo + verdure</li><li>Frutta + frutta secca</li></ul></div>
+<div class="alt"><h3>🏖️ Mare</h3><ul><li>Insalata di riso, tonno e pomodorini</li><li>Patate + uova + pomodori</li><li>Wrap di mais con pollo e verdure</li><li>Quinoa + salmone + verdure</li></ul></div>
+<div class="alt"><h3>🍽️ Ristorante</h3><ul><li>Pesce + verdure + patate/riso</li><li>Carne + contorno + patate/riso</li><li>Uova + verdure + carboidrato compatibile</li><li>Seguire le esclusioni indicate dal nutrizionista</li></ul></div>
+<div class="alt"><h3>🥡 Zero voglia di cucinare</h3><ul><li>Riso pronto + tonno + pomodorini + olio EVO</li><li>Uova + patate + insalata</li><li>Pollo compatibile + riso + verdure</li><li>Yogurt di capra/pecora + frutta + frutta secca</li></ul></div>
+</div>
+</section>
+</div>
+<div id="surprise" class="surprise" aria-live="polite"></div>
+<div id="modal" class="modal">
+<div class="box">
+<button id="close" class="close" aria-label="Chiudi">×</button>
+<div id="modalContent"></div>
+</div>
+</div>
+<script>
+const DATA = {"recipes": {"1": ["Overnight oats ai frutti di bosco", "Colazione", "5 min", ["Avena", "yogurt di capra", "banana", "frutti di bosco", "noci", "cannella"], ["Metti tutto in un barattolo.", "Mescola e lascia in frigorifero per la notte."], "Facile · meal prep"], "2": ["Mela e mandorle", "Spuntino", "2 min", ["Mela", "mandorle"], ["Lava la mela e abbinala alle mandorle."], "Zero cottura"], "3": ["Bowl mediterranea di riso, pollo e verdure", "Pranzo", "20 min", ["Riso basmati", "pollo", "zucchine", "pomodorini", "rucola", "olio EVO", "limone"], ["Cuoci il riso.", "Cuoci pollo e zucchine.", "Componi la bowl e condisci con olio EVO e limone."], "Facile · meal prep"], "4": ["Yogurt di pecora e frutta", "Spuntino", "2 min", ["Yogurt di pecora", "frutta fresca"], ["Unisci yogurt e frutta."], "Zero cottura"], "5": ["Pollo croccante alle erbe con patate", "Cena", "35 min", ["Pollo", "patate", "farina di mais", "rosmarino", "paprika", "insalata", "olio EVO"], ["Condisci le patate.", "Passa il pollo in farina di mais ed erbe.", "Cuoci tutto in forno fino a doratura."], "Sfizioso · forno"], "6": ["Pancake banana e avena", "Colazione", "15 min", ["Avena", "banana", "uova", "cannella", "frutti di bosco", "yogurt di capra"], ["Frulla avena, banana e uova.", "Cuoci i pancake.", "Servi con frutti di bosco e yogurt."], "Sfizioso"], "7": ["Pera e noci", "Spuntino", "2 min", ["Pera", "noci"], ["Lava la pera e abbinala alle noci."], "Zero cottura"], "8": ["Quinoa mediterranea con tonno", "Pranzo", "15 min", ["Quinoa", "tonno", "pomodorini", "cetriolo", "olive", "rucola", "olio EVO", "limone"], ["Cuoci la quinoa.", "Aggiungi gli altri ingredienti e condisci."], "Facile · meal prep"], "9": ["Banana e crema di mandorle", "Spuntino", "2 min", ["Banana", "crema 100% mandorle"], ["Taglia la banana e servila con la crema."], "Zero cottura"], "10": ["Orata al forno con verdure", "Cena", "30 min", ["Orata", "zucchine", "carote", "limone", "prezzemolo", "olio EVO"], ["Metti pesce e verdure in teglia.", "Condisci e cuoci in forno."], "Forno · facile"], "11": ["Toast di grano saraceno, uova e frutta", "Colazione", "10 min", ["Pane di grano saraceno", "uova", "frutta fresca", "erbe aromatiche"], ["Tosta il pane.", "Prepara le uova e servi con frutta."], "Facile"], "12": ["Mela e pistacchi", "Spuntino", "2 min", ["Mela", "pistacchi"], ["Abbina mela e pistacchi."], "Zero cottura"], "13": ["Pasta di mais/riso con pesto e pollo", "Pranzo", "20 min", ["Pasta di mais/riso", "pollo", "basilico", "pinoli o noci", "olio EVO", "pomodorini"], ["Cuoci la pasta.", "Prepara il pesto.", "Cuoci il pollo e unisci tutto."], "Sfizioso"], "14": ["Yogurt di capra, banana e cannella", "Spuntino", "2 min", ["Yogurt di capra", "banana", "cannella"], ["Unisci tutto in una ciotola."], "Zero cottura"], "15": ["Hamburger homemade con patate e insalata", "Cena", "30 min", ["Manzo", "patate", "insalata", "pomodoro", "erbe", "olio EVO"], ["Forma e cuoci l'hamburger.", "Cuoci le patate al forno.", "Servi con insalata."], "Sfizioso"], "16": ["Wrap di mais con pollo per la montagna", "Pranzo al sacco", "15 min", ["Tortilla di mais", "pollo", "hummus di ceci", "rucola", "pomodoro", "banana", "mandorle"], ["Farcisci la tortilla con pollo, hummus e verdure.", "Arrotola e porta con frutta e frutta secca."], "Montagna · meal prep"], "17": ["Yogurt bowl croccante", "Colazione", "5 min", ["Yogurt di capra", "avena", "banana", "kiwi", "nocciole", "cannella"], ["Componi la bowl con tutti gli ingredienti."], "Zero cottura"], "18": ["Arancia e anacardi", "Spuntino", "2 min", ["Arancia", "anacardi"], ["Abbina arancia e anacardi."], "Zero cottura"], "19": ["Riso basmati con salmone e zucchine", "Pranzo", "20 min", ["Riso basmati", "salmone", "zucchine", "limone", "prezzemolo", "olio EVO"], ["Cuoci riso e salmone.", "Salta le zucchine e componi il piatto."], "Facile"], "20": ["Frutta fresca e frutta secca", "Spuntino", "2 min", ["Frutta di stagione", "noci/mandorle/pistacchi"], ["Scegli la frutta disponibile e abbinala alla frutta secca."], "Zero cottura"], "21": ["Frittata mediterranea con patate", "Cena", "25 min", ["Uova", "zucchine", "pomodorini", "patate", "erbe", "insalata"], ["Cuoci patate e verdure.", "Aggiungi le uova e cuoci la frittata."], "Facile"], "22": ["Porridge mela e cannella", "Colazione", "10 min", ["Avena", "latte di mandorla senza zuccheri", "mela", "noci", "cannella"], ["Cuoci l'avena nel latte vegetale.", "Aggiungi mela, cannella e noci."], "Facile"], "23": ["Banana e mandorle", "Spuntino", "2 min", ["Banana", "mandorle"], ["Abbina banana e mandorle."], "Zero cottura"], "24": ["Pollo al curry con riso", "Pranzo", "25 min", ["Pollo", "riso basmati", "latte di cocco senza zuccheri", "curry", "zucchine", "carote"], ["Cuoci il riso.", "Rosola pollo e verdure.", "Aggiungi curry e latte di cocco."], "Sfizioso"], "25": ["Yogurt di pecora e frutti di bosco", "Spuntino", "2 min", ["Yogurt di pecora", "frutti di bosco"], ["Unisci yogurt e frutti di bosco."], "Zero cottura"], "26": ["Salmone croccante al forno", "Cena", "25 min", ["Salmone", "zucchine", "melanzane", "limone", "erbe", "olio EVO"], ["Condisci il salmone.", "Cuoci salmone e verdure al forno."], "Forno · facile"], "27": ["Pancake cacao e banana", "Colazione", "15 min", ["Avena", "banana", "uova", "cacao amaro", "cannella", "frutti di bosco"], ["Frulla gli ingredienti.", "Cuoci i pancake e servi con frutta."], "Sfizioso"], "28": ["Mela e noci", "Spuntino", "2 min", ["Mela", "noci"], ["Abbina mela e noci."], "Zero cottura"], "29": ["Bowl messicana di riso e pollo", "Pranzo", "20 min", ["Riso", "pollo o manzo", "mais", "pomodoro", "insalata", "lime", "paprika"], ["Cuoci riso e proteina.", "Componi la bowl e condisci con lime e paprika."], "Sfizioso · meal prep"], "30": ["Pera e nocciole", "Spuntino", "2 min", ["Pera", "nocciole"], ["Abbina pera e nocciole."], "Zero cottura"], "31": ["Tagliata di manzo con patate e rucola", "Cena", "25 min", ["Manzo", "patate", "rucola", "pomodorini", "limone", "olio EVO"], ["Cuoci le patate.", "Cuoci la carne, affetta e servi con rucola e pomodorini."], "Sfizioso"], "32": ["French toast di grano saraceno", "Colazione", "15 min", ["Pane di grano saraceno", "uova", "cannella", "frutta fresca", "yogurt di capra"], ["Passa il pane nell'uovo.", "Cuoci in padella e servi con frutta e yogurt."], "Weekend · sfizioso"], "33": ["Banana e frutta secca", "Spuntino", "2 min", ["Banana", "mandorle o noci"], ["Abbina banana e frutta secca."], "Zero cottura"], "34": ["Pasta di grano saraceno con ragù", "Pranzo", "35 min", ["Pasta di grano saraceno", "carne macinata", "passata senza zuccheri aggiunti", "carota", "sedano", "cipolla"], ["Prepara il ragù con carne e verdure.", "Cuoci la pasta e condiscila."], "Weekend"], "35": ["Yogurt e frutta fresca", "Spuntino", "2 min", ["Yogurt di capra o pecora", "frutta fresca"], ["Unisci yogurt e frutta."], "Zero cottura"], "36": ["Cena libera strutturata", "Cena", "Variabile", ["Una fonte proteica", "Verdure", "Carboidrato compatibile", "Olio EVO"], ["Scegli proteina + verdure + carboidrato compatibile.", "Mangiare fuori non significa aver fallito il percorso."], "Flessibile"]}, "days": [["DAY 1", "Lunedì", ["1", "2", "3", "4", "5"]], ["DAY 2", "Martedì", ["6", "7", "8", "9", "10"]], ["DAY 3", "Mercoledì", ["11", "12", "13", "14", "15"]], ["DAY 4", "Giovedì", ["17", "18", "19", "20", "21"]], ["DAY 5", "Venerdì", ["22", "23", "24", "25", "26"]], ["DAY 6", "Sabato", ["27", "28", "29", "30", "31"]], ["DAY 7", "Domenica", ["32", "33", "34", "35", "36"]]], "meal_names": ["Colazione", "Spuntino mattina", "Pranzo", "Spuntino pomeriggio", "Cena"]};
+let dayIndex = 0;
+const done = new Set();
+const surprises = ["Miss U 💗","love U ❤️","Wuellaaaa 😎","Piccola BOOOC 🥹❤️","Bravaaa 💕","Gnam gnam 😋","Un bacino 💋","Vai così 💪❤️","W la Poggi 🫶"];
+let last = "";
+
+function surprise(text) {
+  const el = document.getElementById("surprise");
+  let msg = text;
+  if (!msg) {
+    do { msg = surprises[Math.floor(Math.random()*surprises.length)]; } while(msg === last && surprises.length > 1);
+  }
+  last = msg;
+  el.textContent = msg;
+  el.classList.remove("show");
+  void el.offsetWidth;
+  el.classList.add("show");
+  for(let i=0;i<7;i++){
+    const h=document.createElement("span");
+    h.className="heart";
+    h.textContent=["❤️","💕","💗","💖","🩷"][Math.floor(Math.random()*5)];
+    h.style.left=(45+Math.random()*10)+"%";
+    h.style.top=(43+Math.random()*10)+"%";
+    h.style.setProperty("--x",((Math.random()-.5)*190)+"px");
+    h.style.setProperty("--r",((Math.random()-.5)*60)+"deg");
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),1400);
+  }
+}
+
+function renderDays(){
+  const wrap=document.getElementById("days");
+  wrap.innerHTML="";
+  DATA.days.forEach((d,i)=>{
+    const b=document.createElement("button");
+    b.className="day"+(i===dayIndex?" active":"");
+    b.innerHTML="<strong>"+d[0]+"</strong><small>"+d[1]+"</small>";
+    b.addEventListener("click",()=>{dayIndex=i;renderDays();renderMeals();if(Math.random()<.35)surprise();});
+    wrap.appendChild(b);
+  });
+}
+
+function renderMeals(){
+  const d=DATA.days[dayIndex];
+  document.getElementById("heading").innerHTML="<span>"+d[0]+"</span><h2>"+d[1]+"</h2>";
+  const wrap=document.getElementById("meals");
+  wrap.innerHTML="";
+  d[2].forEach((id,i)=>{
+    const r=DATA.recipes[id];
+    const b=document.createElement("button");
+    b.className="meal"+(done.has(id)?" done":"");
+    b.innerHTML='<div class="meta"><span class="type">'+DATA.meal_names[i]+'</span><span>'+r[2]+'</span></div><h3>'+r[0]+'</h3><span><span class="tag">'+r[5]+'</span></span><div class="open"><span>Apri ricetta</span><span>→</span></div>';
+    b.addEventListener("click",()=>openRecipe(id));
+    wrap.appendChild(b);
+  });
+}
+
+function openRecipe(id){
+  const r=DATA.recipes[id];
+  const ing=r[3].map(x=>"<li>"+x+"</li>").join("");
+  const steps=r[4].map(x=>"<li>"+x+"</li>").join("");
+  let alt="Se cambi programma: scegli una fonte proteica + un carboidrato compatibile + verdure/frutta. Fuori casa: pesce o carne con contorno e patate/riso è una soluzione semplice.";
+  if(id==="16") alt="Questa è già la soluzione da pranzo al sacco per una giornata in montagna.";
+  document.getElementById("modalContent").innerHTML='<div class="kicker">'+r[1]+' · '+r[2]+'</div><h2>'+r[0]+'</h2><h4>Ingredienti</h4><ul>'+ing+'</ul><h4>Preparazione</h4><ol>'+steps+'</ol><div class="outside"><strong>Se mangi fuori / cambi programma</strong><p>'+alt+'</p></div><button class="donebtn" id="doneBtn">'+(done.has(id)?"✓ Segnato come fatto":"Segna come fatto")+"</button>";
+  document.getElementById("modal").classList.add("show");
+  document.getElementById("doneBtn").addEventListener("click",()=>{
+    const nowDone=!done.has(id);
+    if(nowDone) done.add(id); else done.delete(id);
+    renderMeals();
+    document.getElementById("doneBtn").textContent=nowDone?"✓ Segnato come fatto":"Segna come fatto";
+    if(nowDone) surprise("Bravissima ❤️");
+  });
+  if(Math.random()<.16) setTimeout(()=>surprise(),120);
+}
+
+document.getElementById("close").addEventListener("click",()=>document.getElementById("modal").classList.remove("show"));
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")document.getElementById("modal").classList.remove("show")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("modal").classList.remove("show")});
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");document.getElementById(t.dataset.view).classList.add("active");
+}));
+document.getElementById("title").addEventListener("click",()=>surprise("LOVE U, PICCOLA BOOOC ❤️"));
+renderDays();
+renderMeals();
+</script>
+</body>
+</html>
